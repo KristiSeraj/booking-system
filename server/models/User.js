@@ -19,6 +19,12 @@ const UserSchema = new mongoose.Schema({
         enum: ['customer', 'admin', 'provider'],
         default: 'customer',
     }
-}, { timestamps: true });
+}, { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }, );
+
+UserSchema.virtual('services', {
+    ref: 'services',
+    localField: '_id',
+    foreignField: 'provider',
+})
 
 module.exports = User = mongoose.model('users', UserSchema);

@@ -3,7 +3,7 @@ const User = require("../models/User");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-
+// Register
 const register = async (req, res) => {
     const { name, email, password, role } = req.body;
 
@@ -23,6 +23,7 @@ const register = async (req, res) => {
     }
 }
 
+// Login
 const login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -43,6 +44,7 @@ const login = async (req, res) => {
     }
 }
 
+// Get authenticated user
 const getAuthUser = async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
@@ -56,6 +58,7 @@ const getAuthUser = async (req, res) => {
     }
 }
 
+// Update name of user
 const updateUser = async (req, res) => {
     try {
         const user = await User.findByIdAndUpdate(req.user.id,{ name: req.body.name }, { new: true });
