@@ -61,7 +61,7 @@ const editService = async (req, res) => {
 // Create slot for a service -> provider
 const createSlot = async (req, res) => {
     try {
-        const { dateTime, isBooked } = req.body;
+        const { dateTime } = req.body;
         const service = await Service.findOne({ _id: req.params.id, provider: req.user.id})
         if (!service) {
             return res.status(404).json({ message: 'Service not found!' });
