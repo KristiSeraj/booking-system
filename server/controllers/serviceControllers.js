@@ -13,6 +13,24 @@ const createService = async (req, res) => {
     }
 }
 
+// Get all providers and their services listed -> customer
+const getAllProvidersAndServices = async (req, res) => {
+    try {
+        const providers = await User.find({ role: 'provider' })
+            .populate({
+                path: 'services',
+                select: 'title'
+            })
+            .select('name');
+        if (!providers.length) {
+            return res.status(404).json({ message: 'No providers found!' });
+        }
+        return res.status(200).json(providers);
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+}
+
 // Get a service -> customer & provider
 const getService = async (req, res) => {
     try {
@@ -78,23 +96,39 @@ const createSlot = async (req, res) => {
     }
 }
 
-// Get all providers and their services listed -> customer
-const getAllProvidersAndServices = async (req, res) => {
+// Edit slot -> provider
+const editSlot = async (req, res) => {
     try {
-        const providers = await User.find({ role: 'provider' })
-            .populate({
-                path: 'services',
-                select: 'title'
-            })
-            .select('name');
-        if (!providers.length) {
-            return res.status(404).json({ message: 'No providers found!' });
+        const { serviceId, slotId } = req.params;
+        const { dateTime } = req.body;
+        const service = await Service.findOneAndUpdate(
+            { _id: serviceId, provider: req.user.id, 'availableSlots._id': slotId },
+            { $set: { 'availableSlots.$.dateTime': dateTime } },
+            { new: true });
+        if (!service) {
+            return res.status(404).json({ message: 'Service or slot not found!' });
         }
-        return res.status(200).json(providers);
+        return res.status(200).json({ message: 'Slot updated successfully!', service });
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
 }
 
+// Delete slot -> provider
+const deleteSlot = async (req, res) => {
+    try {
+        const { serviceId, slotId } = req.params;
+        const service = await Service.findOneAndUpdate(
+            { _id: serviceId, provider: req.user.id },
+            { $pull: { availableSlots: { _id: slotId } } },
+            { new: true});
+        if (!service) {
+            return res.status(404).json({ message: 'Service not found!' });
+        }
+        return res.status(200).json({ message: 'Slot deleted successfully!', service });
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+}
 
-module.exports = { createService, getService, getAllProvidersAndServices, getServices, editService, createSlot };
+module.exports = { createService, getService, getAllProvidersAndServices, getServices, editService, createSlot, editSlot, deleteSlot };
