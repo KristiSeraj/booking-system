@@ -35,4 +35,63 @@ const bookAppointment = async (req, res) => {
     }
 }
 
-module.exports = { bookAppointment };
+// Get appointments -> customer, provider
+const getAllAppointments = async (req, res) => {
+    try {
+        const { role, id } = req.user;
+        let query = {};
+        if (role === 'customer') {
+            query.customer = id;
+        } else if (role === 'provider') {
+            query.provider = id;
+        } else {
+            return res.status(403).json({ message: 'Access denied' });
+        }
+        const appointments = await Appointment.find(query)
+            .populate('service', 'title description')
+            .populate('customer', 'name email')
+            .populate('provider', 'name email')
+            .sort({ dateTime: 1 });
+
+        if (!appointments.length) {
+            return res.status(404).json({ message: 'No appointments found!' });
+        }
+        return res.status(200).json(appointments);
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+}
+
+// Get an appointment details -> customer, provider
+const getAppointment = async (req, res) => {
+    try {
+        const { appointmentId } = req.params;
+        const appointment = await Appointment.findById(appointmentId)
+            .populate('service', 'title description')
+            .populate('customer', 'name email')
+            .populate('provider', 'name email')
+
+        if (!appointment) {
+            return res.status(404).json({ message: 'Appointment not found!' });
+        }
+        return res.status(200).json(appointment);
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+}
+
+// Cancel appointment -> customer
+const cancelAppointment = async (req, res) => {
+    try {
+        const { appointmentId } = req.params;
+        const appointment = await Appointment.findOne({ _id: appoinmentId, customer: req.user.id});
+        if (!appointment) {
+            return res.status(404).json({ message: 'Appointment not found!' });
+        }
+
+    }
+}
+
+// Change an appointment details
+
+module.exports = { bookAppointment, getAllAppointments, getAppointment };
