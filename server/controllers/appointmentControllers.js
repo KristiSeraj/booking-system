@@ -80,18 +80,31 @@ const getAppointment = async (req, res) => {
     }
 }
 
-// Cancel appointment -> customer
-const cancelAppointment = async (req, res) => {
+// Change appointment status -> customer, provider
+const changeAppointmentStatus = async (req, res) => {
     try {
         const { appointmentId } = req.params;
-        const appointment = await Appointment.findOne({ _id: appoinmentId, customer: req.user.id});
+        const { role, id } = req.user;
+        const appointment = await Appointment.findById(appointmentId);
         if (!appointment) {
             return res.status(404).json({ message: 'Appointment not found!' });
         }
-
+        if (role === 'customer' && appointment.customer.toString() !== id) {
+            return res.status(403).json({ message: 'You are not authorized to cancel this appointment!' });
+        }
+        if (role === 'provider' && appointment.provider.toString() !== id) {
+            return res.status(403).json({ message: 'You are not authorized to cancel this appointment!' });
+        }
+        appointment.status = 'Canceled';
+        await appointment.save();
+        await Service.findOneAndUpdate(
+            { _id: appointment.service, 'availableSlots.dateTime': appointment.dateTime },
+            { $set: { 'availableSlots.$.isBooked': false } },
+        );
+        return res.status(200).json({ message: 'Appointment canceled successfully', appointment });
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
     }
 }
 
-// Change an appointment details
-
-module.exports = { bookAppointment, getAllAppointments, getAppointment };
+module.exports = { bookAppointment, getAllAppointments, getAppointment, changeAppointmentStatus };
