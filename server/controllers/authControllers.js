@@ -16,7 +16,7 @@ const register = async (req, res) => {
         user = await new User({ name, email, password: hashedPassword, role });
         await user.save();
         const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '3h' });
-        return res.status(201).json({ message: 'User created successfully', token });
+        return res.status(201).json({ message: 'User created successfully', token, user: { id: user._id, name: user.name, email: user.email } });
     } catch (error) {
         console.log('Error during register', error)
         return res.status(500).json({ errors: [error] });

@@ -1,4 +1,5 @@
 import React, {createContext, useEffect, useState} from 'react';
+import {registerUser} from "../utils/authApi";
 
 export const AuthContext = createContext();
 
@@ -20,6 +21,16 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('user', JSON.stringify(userData));
         localStorage.setItem('token', authToken);
     }
+    const register = async (name, email, password, role) => {
+        try {
+            const response = await registerUser(name, email, password, role);
+            const { user, token } = response.data;
+            login(user, token);
+            return response;
+        } catch (error) {
+            console.log('Registration failed!', error);
+        }
+    }
     const logout = () => {
         setUser(null);
         setToken(null);
@@ -27,7 +38,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('token');
     }
     return (
-        <AuthContext.Provider value={{ user, token, login, logout }}>
+        <AuthContext.Provider value={{ user, token, login, logout, register }}>
             { children }
         </AuthContext.Provider>
     )
