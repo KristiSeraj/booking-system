@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import {Link, useNavigate} from "react-router-dom";
-import useAuth from "../context/useAuth";
-import {loginUser} from "../utils/authApi";
+import React, { useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { loginUser } from "../utils/authApi";
 
 const Login = () => {
     const { login } = useAuth();
@@ -13,7 +13,7 @@ const Login = () => {
         try {
             const response = await loginUser(email, password);
             login(response.data.user, response.data.token);
-            navigate('/booking');
+            navigate('/dashboard');
         } catch (error) {
             console.error(error);
         }

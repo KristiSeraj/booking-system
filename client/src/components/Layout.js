@@ -1,19 +1,26 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useAuth } from "../context/AuthContext";
+import { useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 const navigation = [
-    { name: 'Dashboard', href: '#', current: true },
-    { name: 'Team', href: '#', current: false },
-    { name: 'Projects', href: '#', current: false },
-    { name: 'Calendar', href: '#', current: false },
+    { name: 'Dashboard', href: '/dashboard' },
+    { name: 'Appointments', href: '/appointments' },
+    { name: 'Projects', href: '#' }
 ]
 
-function classNames(...classes) {
+const classNames = (...classes) => {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+const Layout = () => {
+    const { logout } = useAuth();
+    const location = useLocation();
+
     return (
+        <div>
+
         <Disclosure as="nav" className="bg-gray-800">
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                 <div className="relative flex h-16 items-center justify-between">
@@ -28,11 +35,7 @@ export default function Example() {
                     </div>
                     <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                         <div className="flex shrink-0 items-center">
-                            <img
-                                alt="Your Company"
-                                src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
-                                className="h-8 w-auto"
-                            />
+                            <p className='text-white'>Booking System</p>
                         </div>
                         <div className="hidden sm:ml-6 sm:block">
                             <div className="flex space-x-4">
@@ -40,9 +43,9 @@ export default function Example() {
                                     <a
                                         key={item.name}
                                         href={item.href}
-                                        aria-current={item.current ? 'page' : undefined}
+                                        aria-current={location.pathname === item.href ? 'page' : undefined}
                                         className={classNames(
-                                            item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                            location.pathname === item.href ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                                             'rounded-md px-3 py-2 text-sm font-medium',
                                         )}
                                     >
@@ -98,6 +101,7 @@ export default function Example() {
                                 <MenuItem>
                                     <a
                                         href="#"
+                                        onClick={logout}
                                         className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                                     >
                                         Sign out
@@ -128,5 +132,12 @@ export default function Example() {
                 </div>
             </DisclosurePanel>
         </Disclosure>
+            <div className="container mx-auto mt-4">
+                <Outlet />
+            </div>
+        </div>
+
     )
 }
+
+export default Layout;

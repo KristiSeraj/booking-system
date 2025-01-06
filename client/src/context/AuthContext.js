@@ -1,19 +1,35 @@
-import React, {createContext, useEffect, useState} from 'react';
-import {registerUser} from "../utils/authApi";
+import React, {createContext, useContext, useEffect, useState} from 'react';
+import {getAuth, registerUser} from "../utils/authApi";
 
-export const AuthContext = createContext();
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    const fetchAuthUser = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                setLoading(false);
+                return;
+            }
+            const response = await getAuth(token);
+            if (response?.data) {
+                setUser(response.data);
+                setToken(token)
+            }
+            setLoading(false);
+        } catch (error) {
+            console.log('Error fetching user', error);
+            logout();
+            setLoading(false);
+        }
+    }
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        const storedToken = localStorage.getItem('token');
-        if (storedUser && storedToken) {
-            setUser(storedUser);
-            setToken(storedToken);
-        }
+        fetchAuthUser();
     }, []);
     const login = (userData, authToken) => {
         setUser(userData);
@@ -38,8 +54,10 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('token');
     }
     return (
-        <AuthContext.Provider value={{ user, token, login, logout, register }}>
+        <AuthContext.Provider value={{ user, token, login, logout, register, loading }}>
             { children }
         </AuthContext.Provider>
     )
 }
+
+export const useAuth = () => useContext(AuthContext);

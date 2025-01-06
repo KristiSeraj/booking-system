@@ -2,12 +2,15 @@ import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import Login from "./pages/Login";
 import Homepage from "./pages/Homepage";
 import Register from "./pages/Register";
-import Booking from "./pages/Booking";
-import useAuth from "./context/useAuth";
+import Dashboard from "./pages/Dashboard";
+import { useAuth } from "./context/AuthContext";
+import Appointments from "./pages/Appointments";
+import Layout from "./components/Layout";
 
 function AppRoutes() {
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
     const ProtectedRoute = ({ children, role }) => {
+        if (loading) return <p>Loading...</p>
         if (!user) {
             return <Navigate to='/login' />
         }
@@ -22,12 +25,20 @@ function AppRoutes() {
                 <Route index element={<Homepage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/booking" element={
+                <Route element={<Layout />}>
+                <Route path="/dashboard" element={
                     <ProtectedRoute>
-                        <Booking />
+                        <Dashboard />
                     </ProtectedRoute>
                 }
                 />
+                <Route path="/appointments" element={
+                    <ProtectedRoute>
+                        <Appointments />
+                    </ProtectedRoute>
+                }
+                />
+                </Route>
             </Routes>
         </BrowserRouter>
     );

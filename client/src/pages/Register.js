@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {Link, useNavigate} from "react-router-dom";
-import useAuth from "../context/useAuth";
+import React, { useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Register = () => {
   const { register } = useAuth();
@@ -14,7 +14,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const response = await register(name, email, password, role);
-      navigate('/booking');
+      navigate('/dashboard');
     } catch (error) {
       console.error(error);
     }
