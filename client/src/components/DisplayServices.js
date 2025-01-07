@@ -1,14 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useServices } from "../context/ServiceContext";
+import { Link } from "react-router-dom";
+import EditServiceModal from "./EditServiceModal";
 
 const DisplayServices = () => {
-    const { services } = useServices();
-
-    useEffect(() => {
-        console.log(services);
-    }, [services]);
-
+    const { services, deleteService, updateService } = useServices();
     const listServices = services.services || [];
+
+    const handleSave = (updatedService) => {
+        updateService(updatedService._id, updatedService.title, updatedService.description);
+    }
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -17,15 +18,17 @@ const DisplayServices = () => {
                 {listServices.length === 0 ? (
                     <p className="text-gray-500">No services found.</p>
                 ) : listServices && listServices.map((service) => (
-                    <div
-                        key={service._id}
-                        className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow"
-                    >
-                        <h2 className="text-2xl font-semibold text-gray-800 mb-2">{service.title}</h2>
+                    <div key={service._id}
+                         className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow">
+                        <Link to={`/service/${service._id}`}
+                              className="text-2xl font-semibold text-gray-800 mb-2 block">{service.title}</Link>
                         <p className="text-gray-600 mb-4">{service.description}</p>
-                        <button className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
-                            Edit Service
-                        </button>
+                        <div className="flex gap-4">
+                            <EditServiceModal service={service} onSave={handleSave}/>
+                            <button onClick={() => deleteService(service._id)} className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-300">
+                                Delete Service
+                            </button>
+                        </div>
                     </div>
                 ))}
             </div>

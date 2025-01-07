@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import { useAuth } from "./context/AuthContext";
 import Appointments from "./pages/Appointments";
 import Layout from "./components/Layout";
+import ServiceDetails from "./components/ServiceDetails";
 
 function AppRoutes() {
     const { user, loading } = useAuth();
@@ -26,18 +27,24 @@ function AppRoutes() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route element={<Layout />}>
-                <Route path="/dashboard" element={
-                    <ProtectedRoute>
-                        <Dashboard />
-                    </ProtectedRoute>
-                }
-                />
-                <Route path="/appointments" element={
-                    <ProtectedRoute>
-                        <Appointments />
-                    </ProtectedRoute>
-                }
-                />
+                    <Route path="/dashboard" element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                    />
+                    <Route path="/appointments" element={
+                        <ProtectedRoute>
+                            <Appointments />
+                        </ProtectedRoute>
+                    }
+                    />
+                    <Route path="/service/:id" element={
+                        <ProtectedRoute>
+                            <ServiceDetails />
+                        </ProtectedRoute>
+                    }
+                    />
                 </Route>
             </Routes>
         </BrowserRouter>

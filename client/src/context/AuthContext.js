@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }) => {
         fetchAuthUser();
     }, []);
     const login = (userData, authToken) => {
+        if (!userData || !authToken) return;
         setUser(userData);
         setToken(authToken);
         localStorage.setItem('user', JSON.stringify(userData));

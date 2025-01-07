@@ -32,7 +32,7 @@ const getAllProvidersAndServices = async (req, res) => {
 }
 
 // Get a service -> customer & provider
-const getService = async (req, res) => {
+const getServiceById = async (req, res) => {
     try {
         const service = await Service.findById(req.params.id);
         if (!service) {
@@ -71,6 +71,19 @@ const editService = async (req, res) => {
         service.description = description || service.description;
         await service.save();
         return res.status(200).json({ message: 'Service updated successfully', service });
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+}
+
+// Edit service -> provider
+const deleteService = async (req, res) => {
+    try {
+        const service = await Service.findOneAndDelete({ _id: req.params.id, provider: req.user.id });
+        if (!service) {
+            return res.status(404).json({ message: 'Service not found or you are not authorized to delete this service!' });
+        }
+        return res.status(200).json({ message: 'Service deleted successfully' });
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
@@ -131,4 +144,4 @@ const deleteSlot = async (req, res) => {
     }
 }
 
-module.exports = { createService, getService, getAllProvidersAndServices, getServices, editService, createSlot, editSlot, deleteSlot };
+module.exports = { createService, getServiceById, getAllProvidersAndServices, getServices, editService, deleteService, createSlot, editSlot, deleteSlot };
