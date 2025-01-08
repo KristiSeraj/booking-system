@@ -3,17 +3,21 @@ import { useServices } from "../context/ServiceContext";
 import { Link } from "react-router-dom";
 import EditServiceModal from "./EditServiceModal";
 import CreateServiceModal from "./CreateServiceModal";
+import {useBanner} from "../context/BannerContext";
 
 const DisplayServices = () => {
-    const { services, deleteService, updateService, createNewService } = useServices();
+    const { services, deleteService, updateService, createNewService, error } = useServices();
+    const { showMessage } = useBanner();
     const listServices = services.services || [];
 
     const handleSave = async (updatedService) => {
         await updateService(updatedService._id, updatedService.title, updatedService.description);
+        showMessage(error, 'error');
     }
 
     const handleCreate = async (newService) => {
         await createNewService(newService.title, newService.description);
+        showMessage(error, 'error');
     }
 
     return (

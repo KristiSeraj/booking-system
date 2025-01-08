@@ -1,6 +1,7 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import { useAuth } from "./AuthContext";
 import {getAllProvidersAndServices, getServices, deleteServiceById, editService, createService } from "../utils/serviceApi";
+import {useBanner} from "./BannerContext";
 
 const ServiceContext = createContext();
 
@@ -13,7 +14,7 @@ const ROLES = {
 export const ServiceProvider = ({ children }) => {
     const { user, token } = useAuth();
     const [services, setServices] = useState([]);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -53,8 +54,8 @@ export const ServiceProvider = ({ children }) => {
                 services: [ ...prevState.services, newService ]
             }));
         } catch (error) {
-            console.log('Error creating service', error);
-            setError(error.message);
+            console.log('Error creating service', error.response.data.error);
+            setError(error.response.data.error);
         }
     }
 
@@ -86,6 +87,7 @@ export const ServiceProvider = ({ children }) => {
             setError(error.message);
         }
     }
+
 
     return (
         <ServiceContext.Provider value={{ services, error, loading, deleteService, updateService, createNewService }}>
