@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import {useBanner} from "../context/BannerContext";
 
 const Register = () => {
-  const { register, login } = useAuth();
+  const { register } = useAuth();
   const { showMessage } = useBanner();
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
