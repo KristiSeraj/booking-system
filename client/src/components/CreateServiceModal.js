@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 
-const EditServiceModal = ({ service, onSave }) => {
+const CreateServiceModal = ({ onSave }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
 
     const handleSave = () => {
-        onSave({ ...service, title, description})
+        onSave({ title, description });
         handleClose();
     }
 
@@ -21,13 +21,13 @@ const EditServiceModal = ({ service, onSave }) => {
     return (
         <>
             <button onClick={() => setIsOpen(true)} className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300">
-                Edit Service
+                Create Service
             </button>
 
             {isOpen && (
                 <div onClick={handleOverlayClick} className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
-                        <h2 className="text-2xl font-bold text-gray-800 mb-4">Edit Service</h2>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4">Create Service</h2>
 
                         <label className="block mb-2 text-sm font-medium text-gray-600">Title</label>
                         <input
@@ -58,7 +58,7 @@ const EditServiceModal = ({ service, onSave }) => {
                 </div>
             )}
         </>
-    )
-}
+    );
+};
 
-export default EditServiceModal;
+export default CreateServiceModal;

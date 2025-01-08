@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import { useAuth } from "./AuthContext";
-import {getAllProvidersAndServices, getServices, deleteServiceById, editService} from "../utils/serviceApi";
+import {getAllProvidersAndServices, getServices, deleteServiceById, editService, createService } from "../utils/serviceApi";
 
 const ServiceContext = createContext();
 
@@ -44,6 +44,20 @@ export const ServiceProvider = ({ children }) => {
         }
     }
 
+    const createNewService = async (title, description) => {
+        try {
+            const response = await createService(token, title, description);
+            const newService = response.data;
+            setServices((prevState) => ({
+                ...prevState,
+                services: [ ...prevState.services, newService ]
+            }));
+        } catch (error) {
+            console.log('Error creating service', error);
+            setError(error.message);
+        }
+    }
+
     const deleteService = async (id) => {
         try {
             await deleteServiceById(id, token);
@@ -59,21 +73,22 @@ export const ServiceProvider = ({ children }) => {
 
     const updateService = async (id, title, description) => {
         try {
-            await editService(id, token, title, description);
+            const response = await editService(id, token, title, description);
+            const updatedService = response.data.service;
             setServices((prevState) => ({
                 ...prevState,
-                services: prevState.services.map((service) => service._id === id ? { ...services, title, description } : service)
-            }))
-            console.log(services)
+                services: prevState.services.map((service) =>
+                    service._id === updatedService._id ? updatedService : service
+                ),
+            }));
         } catch (error) {
             console.log('Error updating service', error);
             setError(error.message);
         }
     }
 
-
     return (
-        <ServiceContext.Provider value={{ services, error, loading, deleteService, updateService }}>
+        <ServiceContext.Provider value={{ services, error, loading, deleteService, updateService, createNewService }}>
             {children}
         </ServiceContext.Provider>
     )

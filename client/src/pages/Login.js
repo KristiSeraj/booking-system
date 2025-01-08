@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { loginUser } from "../utils/authApi";
+import {useBanner} from "../context/BannerContext";
 
 const Login = () => {
     const { login } = useAuth();
+    const { showMessage } = useBanner();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
@@ -16,6 +19,7 @@ const Login = () => {
             navigate('/dashboard');
         } catch (error) {
             console.error(error);
+            showMessage(error.response.data.message, 'error');
         }
     }
     return (

@@ -7,6 +7,7 @@ import { useAuth } from "./context/AuthContext";
 import Appointments from "./pages/Appointments";
 import Layout from "./components/Layout";
 import ServiceDetails from "./components/ServiceDetails";
+import Profile from "./pages/Profile";
 
 function AppRoutes() {
     const { user, loading } = useAuth();
@@ -27,6 +28,12 @@ function AppRoutes() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route element={<Layout />}>
+                    <Route path="profile" element={
+                        <ProtectedRoute>
+                            <Profile />
+                        </ProtectedRoute>
+                    }
+                    />
                     <Route path="/dashboard" element={
                         <ProtectedRoute>
                             <Dashboard />

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import {useBanner} from "../context/BannerContext";
 
 const Register = () => {
-  const { register } = useAuth();
+  const { register, login } = useAuth();
+  const { showMessage } = useBanner();
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
@@ -13,10 +15,11 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await register(name, email, password, role);
+      await register(name, email, password, role);
       navigate('/dashboard');
     } catch (error) {
       console.error(error);
+      showMessage(error.response.data, 'error');
     }
   }
   return (
@@ -95,7 +98,7 @@ const Register = () => {
               <div className="mt-2">
                 <label className="ml-2">
                   <input
-                      id="role"
+                      id="customer"
                       name="role"
                       type="radio"
                       value='customer'
@@ -109,7 +112,7 @@ const Register = () => {
               <div className="mt-2">
                 <label className="ml-2">
                   <input
-                      id="role"
+                      id="provider"
                       name="role"
                       type="radio"
                       value='provider'

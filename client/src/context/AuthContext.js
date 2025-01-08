@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
-import {getAuth, registerUser} from "../utils/authApi";
+import {getAuth, registerUser, updateUser} from "../utils/authApi";
 
 const AuthContext = createContext();
 
@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
 
     const fetchAuthUser = async () => {
         try {
-            const token = localStorage.getItem("token");
+            const token = localStorage.getItem('token');
             if (!token) {
                 setLoading(false);
                 return;
@@ -28,9 +28,29 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const updateAuthUser = async (name) => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                setLoading(false);
+                return;
+            }
+            const response = await updateUser(name, token);
+            if (response?.data) {
+                setUser({ ...user, name: response.data.user.name})
+                setToken(token);
+            }
+            setLoading(false);
+        } catch (error) {
+            console.log('Error updating user', error);
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
         fetchAuthUser();
     }, []);
+
     const login = (userData, authToken) => {
         if (!userData || !authToken) return;
         setUser(userData);
@@ -38,6 +58,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('user', JSON.stringify(userData));
         localStorage.setItem('token', authToken);
     }
+
     const register = async (name, email, password, role) => {
         try {
             const response = await registerUser(name, email, password, role);
@@ -46,8 +67,10 @@ export const AuthProvider = ({ children }) => {
             return response;
         } catch (error) {
             console.log('Registration failed!', error);
+            setLoading(false);
         }
     }
+
     const logout = () => {
         setUser(null);
         setToken(null);
@@ -55,7 +78,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('token');
     }
     return (
-        <AuthContext.Provider value={{ user, token, login, logout, register, loading }}>
+        <AuthContext.Provider value={{ user, token, login, logout, register, loading, updateAuthUser }}>
             { children }
         </AuthContext.Provider>
     )

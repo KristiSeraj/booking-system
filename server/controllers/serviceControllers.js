@@ -63,12 +63,12 @@ const getServices = async (req, res) => {
 const editService = async (req, res) => {
     try {
         const { title, description } = req.body;
-        const service = await Service.findOne({ _id: req.params.id, provider: req.user.id });
-        if (!service) {
+        const service = await Service.findById(req.params.id);
+        if (!service || service.provider.toString() !== req.user.id) {
             return res.status(404).json({ message: 'Service not found or you are not authorized to edit this service!' });
         }
-        service.title = title || service.title;
-        service.description = description || service.description;
+        if (title) service.title = title;
+        if (description) service.description = description;
         await service.save();
         return res.status(200).json({ message: 'Service updated successfully', service });
     } catch (error) {
@@ -76,7 +76,7 @@ const editService = async (req, res) => {
     }
 }
 
-// Edit service -> provider
+// Delete service -> provider
 const deleteService = async (req, res) => {
     try {
         const service = await Service.findOneAndDelete({ _id: req.params.id, provider: req.user.id });

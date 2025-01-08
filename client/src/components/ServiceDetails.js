@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {getServiceById} from "../utils/serviceApi";
+import CreateSlotModal from "./CreateSlotModal";
 
 const ServiceDetails = () => {
     const { id } = useParams();
@@ -33,7 +34,6 @@ const ServiceDetails = () => {
         return <p className="text-center text-red-500">{error.message}</p>;
     }
 
-    console.log(service)
     return (
         <div className="container mx-auto px-4 py-8">
             {service ? (
@@ -48,9 +48,7 @@ const ServiceDetails = () => {
                     <div className="mt-8">
                         <div className="mt-8 flex items-center justify-between mb-6">
                             <h2 className="text-2xl font-semibold text-gray-800 mb-4">Available Slots</h2>
-                            <button className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300">
-                                Create slot
-                            </button>
+                            <CreateSlotModal />
                         </div>
                         {service.availableSlots && service.availableSlots.length > 0 ? (
                             <ul className="space-y-4">
