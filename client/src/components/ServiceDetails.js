@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { getServiceById } from "../utils/serviceApi";
 import CreateSlotModal from "./CreateSlotModal";
 import { useServices } from "../context/ServiceContext";
+import ThreeDotMenu from "./ThreeDotMenu";
 
 const ServiceDetails = () => {
     const { id } = useParams();
@@ -15,6 +16,13 @@ const ServiceDetails = () => {
 
     const handleCreate = async (dateTime) => {
         await createNewSlot(id, dateTime);
+    }
+
+    const handleEdit = () => {
+        console.log('edit clicked')
+    }
+    const handleDelete = () => {
+        console.log('delete clicked')
     }
     
     useEffect(() => {
@@ -63,7 +71,7 @@ const ServiceDetails = () => {
                                         className="flex items-center justify-between bg-gray-50 p-4 rounded-lg border border-gray-200">
                                         <span className="text-gray-700 uppercase">{new Date(slot.dateTime).toLocaleString('en-GB', { month: '2-digit', day: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true })}</span>
                                         <span className={`px-3 py-1 rounded-full text-sm ${slot.isBooked ? "bg-red-500 text-white" : 'bg-green-500 text-white'}`}>{slot.isBooked ? "Booked" : "Available"}</span>
-                                        <span>&#8226;&#8226;&#8226;</span>
+                                        <ThreeDotMenu onEdit={handleEdit} onDelete={handleDelete} />
                                     </li>
                                 ))}
                             </ul>
