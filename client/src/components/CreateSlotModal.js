@@ -6,7 +6,6 @@ const CreateSlotModal = ({ onSave }) => {
 
     const handleSave = () => {
         onSave(dateTime);
-        console.log(new Date(dateTime).toISOString().slice(0, 16))
         handleClose();
     }
 

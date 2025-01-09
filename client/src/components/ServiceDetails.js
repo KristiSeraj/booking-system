@@ -21,6 +21,7 @@ const ServiceDetails = () => {
     const handleEdit = () => {
         console.log('edit clicked')
     }
+
     const handleDelete = () => {
         console.log('delete clicked')
     }

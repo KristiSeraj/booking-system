@@ -8,6 +8,7 @@ import Appointments from "./pages/Appointments";
 import Layout from "./components/Layout";
 import ServiceDetails from "./components/ServiceDetails";
 import Profile from "./pages/Profile";
+import NotFound from "./pages/NotFound";
 
 function AppRoutes() {
     const { user, loading } = useAuth();
@@ -53,6 +54,7 @@ function AppRoutes() {
                     }
                     />
                 </Route>
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </BrowserRouter>
     );
