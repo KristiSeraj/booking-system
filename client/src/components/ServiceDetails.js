@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import {getServiceById} from "../utils/serviceApi";
+import { getServiceById } from "../utils/serviceApi";
 import CreateSlotModal from "./CreateSlotModal";
 
 const ServiceDetails = () => {
@@ -19,7 +19,7 @@ const ServiceDetails = () => {
                 setService(response.data);
             } catch (error) {
                 console.log('Error fetching service', error);
-                setError(error);
+                setError(error.response.data.message);
             } finally {
                 setLoading(false);
             }
@@ -31,7 +31,7 @@ const ServiceDetails = () => {
         return <p className="text-center text-gray-500">Loading...</p>;
     }
     if (error) {
-        return <p className="text-center text-red-500">{error.message}</p>;
+        return <p className="text-center text-red-500">{error}</p>;
     }
 
     return (

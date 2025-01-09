@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 const CreateSlotModal = () => {
     const [dateTime, setDateTime] = useState('');
     const [isOpen, setIsOpen] = useState(false);
 
     const handleSave = () => {
+        console.log(dateTime)
         handleClose();
     }
 

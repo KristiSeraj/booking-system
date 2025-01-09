@@ -1,5 +1,5 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
-import {getAuth, registerUser, updateUser} from "../utils/authApi";
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { getAuth, registerUser, updateUser } from "../utils/authApi";
 import { useBanner } from './BannerContext';
 
 const AuthContext = createContext();

@@ -1,7 +1,7 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useAuth } from "./AuthContext";
-import {getAllProvidersAndServices, getServices, deleteServiceById, editService, createService } from "../utils/serviceApi";
-import {useBanner} from "./BannerContext";
+import { getAllProvidersAndServices, getServices, deleteServiceById, editService, createService } from "../utils/serviceApi";
+import { useBanner } from "./BannerContext";
 
 const ServiceContext = createContext();
 

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 const CreateServiceModal = ({ onSave }) => {
     const [isOpen, setIsOpen] = useState(false);
