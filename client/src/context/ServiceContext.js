@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useAuth } from "./AuthContext";
-import { getAllProvidersAndServices, getServices, deleteServiceById, editService, createService } from "../utils/serviceApi";
+import { getAllProvidersAndServices, getServices, deleteServiceById, editService, createService, createSlot, getServiceById } from "../utils/serviceApi";
 import { useBanner } from "./BannerContext";
 
 const ServiceContext = createContext();
@@ -90,9 +90,23 @@ export const ServiceProvider = ({ children }) => {
         }
     }
 
+    const createNewSlot = async (id, dateTime) => {
+        try {
+            const response = await createSlot(id, token, dateTime);
+            const updatedService = await getServiceById(id, token);
+            setServices((prevState) => ({
+                ...prevState,
+                services: prevState.services.map((service) => service._id === updatedService._id ? updatedService : service)
+            }))
+            showMessage(response.data.message, 'success');
+        } catch (error) {
+            console.log('Error creating slot', error);
+            showMessage(error.response.data.message, 'error');
+        }
+    }
 
     return (
-        <ServiceContext.Provider value={{ services, loading, deleteService, updateService, createNewService }}>
+        <ServiceContext.Provider value={{ services, loading, deleteService, updateService, createNewService, createNewSlot }}>
             {children}
         </ServiceContext.Provider>
     )
