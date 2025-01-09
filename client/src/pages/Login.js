@@ -17,6 +17,7 @@ const Login = () => {
             const response = await loginUser(email, password);
             login(response.data.user, response.data.token);
             navigate('/dashboard');
+            showMessage(response.data.message, 'success')
         } catch (error) {
             console.error(error);
             showMessage(error.response.data.message, 'error');

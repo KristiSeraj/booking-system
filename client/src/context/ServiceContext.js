@@ -13,8 +13,8 @@ const ROLES = {
 
 export const ServiceProvider = ({ children }) => {
     const { user, token } = useAuth();
+    const { showMessage } = useBanner();
     const [services, setServices] = useState([]);
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -39,7 +39,7 @@ export const ServiceProvider = ({ children }) => {
             setServices(response.data);
         } catch (error) {
             console.log('Error fetching service provider', error);
-            setError(error.message);
+            showMessage(error.response.data.message, 'error')
         } finally {
             setLoading(false);
         }
@@ -55,20 +55,21 @@ export const ServiceProvider = ({ children }) => {
             }));
         } catch (error) {
             console.log('Error creating service', error.response.data.error);
-            setError(error.response.data.error);
+            showMessage(error.response.data.error, 'error')
         }
     }
 
     const deleteService = async (id) => {
         try {
-            await deleteServiceById(id, token);
+            const response = await deleteServiceById(id, token);
             setServices((prevState) => ({
                 ...prevState,
                 services: prevState.services.filter((service) => service._id !== id)
             }))
+            showMessage(response.data.message, 'success')
         } catch (error) {
             console.log('Error deleting service', error);
-            setError(error.message);
+            showMessage(error.response.data.message, 'error');
         }
     }
 
@@ -82,15 +83,16 @@ export const ServiceProvider = ({ children }) => {
                     service._id === updatedService._id ? updatedService : service
                 ),
             }));
+            showMessage(response.data.message, 'success')
         } catch (error) {
             console.log('Error updating service', error);
-            setError(error.message);
+            showMessage(error.response.data.message, 'error');
         }
     }
 
 
     return (
-        <ServiceContext.Provider value={{ services, error, loading, deleteService, updateService, createNewService }}>
+        <ServiceContext.Provider value={{ services, loading, deleteService, updateService, createNewService }}>
             {children}
         </ServiceContext.Provider>
     )

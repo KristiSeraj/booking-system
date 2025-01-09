@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import {useBanner} from "../context/BannerContext";
 
 const Register = () => {
   const { register } = useAuth();
-  const { showMessage } = useBanner();
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
@@ -19,7 +17,6 @@ const Register = () => {
       navigate('/dashboard');
     } catch (error) {
       console.error(error);
-      showMessage(error.response.data, 'error');
     }
   }
   return (

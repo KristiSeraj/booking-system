@@ -1,5 +1,6 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {getAuth, registerUser, updateUser} from "../utils/authApi";
+import { useBanner } from './BannerContext';
 
 const AuthContext = createContext();
 
@@ -7,6 +8,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
     const [loading, setLoading] = useState(true);
+    const { showMessage } = useBanner();
 
     const fetchAuthUser = async () => {
         try {
@@ -41,9 +43,11 @@ export const AuthProvider = ({ children }) => {
                 setToken(token);
             }
             setLoading(false);
+            showMessage(response.data.message, 'success')
         } catch (error) {
             console.log('Error updating user', error);
             setLoading(false);
+            showMessage(error.response.data.message, 'error')
         }
     }
 
@@ -64,10 +68,12 @@ export const AuthProvider = ({ children }) => {
             const response = await registerUser(name, email, password, role);
             const { user, token } = response.data;
             login(user, token);
+            showMessage(response.data.message, 'success');
             return response;
         } catch (error) {
             console.log('Registration failed!', error);
             setLoading(false);
+            showMessage(error.response.data.message, 'error')
         }
     }
 

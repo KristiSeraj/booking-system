@@ -5,13 +5,13 @@ import {BannerProvider} from "./context/BannerContext";
 
 function App() {
     return (
-        <AuthProvider>
-            <ServiceProvider>
-                <BannerProvider>
+        <BannerProvider>
+            <AuthProvider>
+                <ServiceProvider>
                     <AppRoutes />
-                </BannerProvider>
-            </ServiceProvider>
-        </AuthProvider>
+                </ServiceProvider>
+            </AuthProvider>
+        </BannerProvider>
     );
 }
 
