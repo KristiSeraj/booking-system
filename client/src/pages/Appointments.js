@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAppointment } from '../context/AppointmentContext';
 
-const AppointmentListUI = () => {
+const Appointments = () => {
     const { appointments } = useAppointment();
     const [statusFilter, setStatusFilter] = useState('');
     const [filteredAppointments, setFilteredAppointments] = useState(appointments);
@@ -38,11 +38,11 @@ const AppointmentListUI = () => {
             <table className="w-full table-auto border-collapse">
                 <thead>
                     <tr>
-                        <th className="px-4 py-2 border-b">Service</th>
-                        <th className="px-4 py-2 border-b">Customer</th>
-                        <th className="px-4 py-2 border-b">Provider</th>
-                        <th className="px-4 py-2 border-b">Status</th>
-                        <th className="px-4 py-2 border-b">Date/Time</th>
+                        <th className="text-left px-4 py-2 border-b">Service</th>
+                        <th className="text-left px-4 py-2 border-b">Customer</th>
+                        <th className="text-left px-4 py-2 border-b">Provider</th>
+                        <th className="text-left px-4 py-2 border-b">Status</th>
+                        <th className="text-left px-4 py-2 border-b">Date/Time</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,20 +57,20 @@ const AppointmentListUI = () => {
                             <tr key={appointment._id}>
                                 <td className="px-4 py-2 border-b">
                                     <div>
-                                        <strong>{appointment.service?.title || 'Service not available!'}</strong>
+                                        <strong className={`${!appointment.service ? 'text-yellow-500 italic' : ''}`}>{appointment.service?.title || 'Service not available!'}</strong>
                                         <p className="text-sm text-gray-500">{appointment.service?.description}</p>
                                     </div>
                                 </td>
                                 <td className="px-4 py-2 border-b">
                                     <div>
-                                        <strong>{appointment.customer.name || 'User does not exist!'}</strong>
-                                        <p className="text-sm text-gray-500">{appointment.customer.email}</p>
+                                        <strong className={`${!appointment.customer ? 'text-yellow-500 italic' : ''}`}>{appointment.customer?.name || 'User does not exist!'}</strong>
+                                        <p className="text-sm text-gray-500">{appointment.customer?.email}</p>
                                     </div>
                                 </td>
                                 <td className="px-4 py-2 border-b">
                                     <div>
-                                        <strong>{appointment.provider.name || 'User does not exist!'}</strong>
-                                        <p className="text-sm text-gray-500">{appointment.provider.email}</p>
+                                        <strong className={`${!appointment.provider ? 'text-yellow-500 italic' : ''}`}>{appointment.provider?.name || 'User does not exist!'}</strong>
+                                        <p className="text-sm text-gray-500">{appointment.provider?.email}</p>
                                     </div>
                                 </td>
                                 <td className="px-4 py-2 border-b">
@@ -90,4 +90,4 @@ const AppointmentListUI = () => {
     );
 };
 
-export default AppointmentListUI;
+export default Appointments;

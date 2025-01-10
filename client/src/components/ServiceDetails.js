@@ -6,6 +6,7 @@ import CreateSlotModal from "./CreateSlotModal";
 import { useServices } from "../context/ServiceContext";
 import ThreeDotMenu from "./ThreeDotMenu";
 import { useAppointment } from "../context/AppointmentContext";
+import GoBackButton from "./GoBackButton";
 
 const ServiceDetails = () => {
     const { id } = useParams();
@@ -59,6 +60,7 @@ const ServiceDetails = () => {
 
     return (
         <div className="container mx-auto px-4 py-8">
+            <GoBackButton />
             {service ? (
                 <div className="bg-white shadow-md rounded-lg p-6">
                     <h1 className="text-4xl font-bold text-gray-800 mb-4">{service.title}</h1>
