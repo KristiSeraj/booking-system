@@ -105,8 +105,17 @@ export const ServiceProvider = ({ children }) => {
         }
     }
 
+    // const deleteSlotById = async () => {
+    //     try {
+
+    //     } catch (error) {
+    //         console.log('Error deleting slot', error);
+    //         showMessage
+    //     }
+    // }
+
     return (
-        <ServiceContext.Provider value={{ services, loading, deleteService, updateService, createNewService, createNewSlot }}>
+        <ServiceContext.Provider value={{ services, setServices, loading, deleteService, updateService, createNewService, createNewSlot }}>
             {children}
         </ServiceContext.Provider>
     )

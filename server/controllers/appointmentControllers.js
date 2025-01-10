@@ -52,10 +52,7 @@ const getAllAppointments = async (req, res) => {
             .populate('customer', 'name email')
             .populate('provider', 'name email')
             .sort({ dateTime: 1 });
-
-        if (!appointments.length) {
-            return res.status(404).json({ message: 'No appointments found!' });
-        }
+            
         return res.status(200).json(appointments);
     } catch (error) {
         return res.status(400).json({ error: error.message });
