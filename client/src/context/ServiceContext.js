@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useAuth } from "./AuthContext";
-import { getAllProvidersAndServices, getServices, deleteServiceById, editService, createService, createSlot, getServiceById } from "../utils/serviceApi";
+import { getAllProvidersAndServices, getServices, deleteServiceById, editService, createService, createSlot, getServiceById, deleteSlot, editSlot } from "../utils/serviceApi";
 import { useBanner } from "./BannerContext";
 
 const ServiceContext = createContext();
@@ -39,7 +39,7 @@ export const ServiceProvider = ({ children }) => {
             setServices(response.data);
         } catch (error) {
             console.log('Error fetching service provider', error);
-            showMessage(error.response.data.message, 'error')
+            showMessage(error.response.data.error, 'error')
         } finally {
             setLoading(false);
         }
@@ -69,7 +69,7 @@ export const ServiceProvider = ({ children }) => {
             showMessage(response.data.message, 'success')
         } catch (error) {
             console.log('Error deleting service', error);
-            showMessage(error.response.data.message, 'error');
+            showMessage(error.response.data.error, 'error');
         }
     }
 
@@ -86,7 +86,7 @@ export const ServiceProvider = ({ children }) => {
             showMessage(response.data.message, 'success')
         } catch (error) {
             console.log('Error updating service', error);
-            showMessage(error.response.data.message, 'error');
+            showMessage(error.response.data.error, 'error');
         }
     }
 
@@ -101,21 +101,42 @@ export const ServiceProvider = ({ children }) => {
             showMessage(response.data.message, 'success');
         } catch (error) {
             console.log('Error creating slot', error);
-            showMessage(error.response.data.message, 'error');
+            showMessage(error.response.data.error, 'error');
         }
     }
 
-    // const deleteSlotById = async () => {
-    //     try {
+    const updateSlot = async (serviceId, slotId, dateTime) => {
+        try {
+            const response = await editSlot(serviceId, slotId, token, dateTime);
+            const updatedService = await getServiceById(serviceId, token);
+            setServices((prevState) => ({
+                ...prevState,
+                services: prevState.services.map((service) => service._id === updatedService._id ? updatedService : service)
+            }))
+            showMessage(response.data.message, 'success');
+        } catch (error) {
+            console.log('Error updating slot', error);
+            showMessage(error.response.data.error, 'error')
+        }
+    }
 
-    //     } catch (error) {
-    //         console.log('Error deleting slot', error);
-    //         showMessage
-    //     }
-    // }
+    const deleteSlotById = async (serviceId, slotId) => {
+        try {
+            const response = await deleteSlot(serviceId, slotId, token);
+            const updatedService = await getServiceById(serviceId, token);
+            setServices((prevState) => ({
+                ...prevState,
+                services: prevState.services.map((service) => service._id === updatedService._id ? updatedService : service)
+            }));
+            showMessage(response.data.message, 'success');
+        } catch (error) {
+            console.log('Error deleting slot', error);
+            showMessage(error.response.data.error, 'error');
+        }
+    }
 
     return (
-        <ServiceContext.Provider value={{ services, setServices, loading, deleteService, updateService, createNewService, createNewSlot }}>
+        <ServiceContext.Provider value={{ services, setServices, loading, deleteService, updateService, createNewService, createNewSlot, deleteSlotById, updateSlot }}>
             {children}
         </ServiceContext.Provider>
     )
