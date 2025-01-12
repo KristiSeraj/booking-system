@@ -1,3 +1,4 @@
+const Appointment = require('../models/Appointment');
 const Service = require('../models/Service');
 const User = require('../models/User');
 
@@ -83,6 +84,7 @@ const deleteService = async (req, res) => {
         if (!service) {
             return res.status(404).json({ message: 'Service not found or you are not authorized to delete this service!' });
         }
+        await Appointment.updateMany({ service: req.params.id }, { $set: { 'status': 'Canceled' }});
         return res.status(200).json({ message: 'Service deleted successfully' });
     } catch (error) {
         return res.status(400).json({ error: error.message });
