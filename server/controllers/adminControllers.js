@@ -25,6 +25,12 @@ const deleteUser = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User not found.' });
         }
+        if (user.role === 'provider') {
+            await Appointment.updateMany({ provider: req.params.id }, { $set: { 'status': 'Canceled' }});
+        }
+        if (user.role === 'customer') {
+            await Appointment.updateMany({ customer: req.params.id }, { $set: { 'status': 'Canceled' }});
+        }
         return res.status(200).json({ message: `User with ID ${req.params.id} is deleted successfully` });
     } catch (error) {
         return res.status(400).json({ message: error.message });
