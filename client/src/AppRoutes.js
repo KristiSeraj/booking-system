@@ -10,6 +10,7 @@ import ServiceDetails from "./components/ServiceDetails";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import AdminPanel from "./pages/AdminPanel";
+import AdminUsersList from "./components/AdminUsersList";
 
 function AppRoutes() {
     const { user, loading } = useAuth();
@@ -62,7 +63,7 @@ function AppRoutes() {
                         <AdminPanel />
                     </ProtectedRoute>
                 }>
-                    
+                    <Route path="users" element={<AdminUsersList />}/>
                 </Route>
                 {user?.role === 'admin' && <Route path="*" element={<Navigate to='/admin' />} />}
             </Routes>

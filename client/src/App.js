@@ -3,6 +3,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { ServiceProvider } from "./context/ServiceContext";
 import { BannerProvider } from "./context/BannerContext";
 import { AppointmentProvider } from "./context/AppointmentContext";
+import { AdminProvider } from "./context/AdminContext";
 
 function App() {
     return (
@@ -10,7 +11,9 @@ function App() {
             <AuthProvider>
                 <ServiceProvider>
                     <AppointmentProvider>
-                        <AppRoutes />
+                        <AdminProvider>
+                            <AppRoutes />
+                        </AdminProvider>
                     </AppointmentProvider>
                 </ServiceProvider>
             </AuthProvider>
