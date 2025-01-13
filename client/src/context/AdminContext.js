@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useAuth } from './AuthContext';
-import { deleteUser, getAllUsers } from '../utils/adminApi';
+import { deleteAppointment, deleteService, deleteUser, getAllAppointments, getAllServices, getAllUsers } from '../utils/adminApi';
 import { useBanner } from './BannerContext';
 
 const AdminContext = createContext();
@@ -9,6 +9,16 @@ export const AdminProvider = ({ children }) => {
     const { token, user } = useAuth();
     const { showMessage } = useBanner();
     const [users, setUsers] = useState([]);
+    const [services, setServices] = useState([]);
+    const [appointments, setAppointments] = useState([]);
+
+    useEffect(() => {
+        if (token && user?.role === 'admin') {
+            adminGetUsers();
+            adminGetServices();
+            adminGetAppointments();
+        }
+    }, [token, user?.role])
 
     const adminGetUsers = async () => {
         if (!token || user?.role !== 'admin') return;
@@ -17,6 +27,26 @@ export const AdminProvider = ({ children }) => {
             setUsers(response.data);
         } catch (error) {
             console.log('Error fetching users', error);
+            showMessage(error.response.data.message, 'error');
+        }
+    }
+
+    const adminGetServices = async () => {
+        try {
+            const response = await getAllServices(token);
+            setServices(response.data);
+        } catch (error) {
+            console.log('Error fetching services', error);
+            showMessage(error.response.data.message, 'error');
+        }
+    }
+
+    const adminGetAppointments = async () => {
+        try {
+            const response = await getAllAppointments(token);
+            setAppointments(response.data);
+        } catch (error) {
+            console.log('Error fetching appointments', error);
             showMessage(error.response.data.message, 'error');
         }
     }
@@ -32,14 +62,31 @@ export const AdminProvider = ({ children }) => {
         }
     }
 
-    useEffect(() => {
-        if (token && user?.role === 'admin') {
-            adminGetUsers();
+    const adminDeleteService = async (id) => {
+        try {
+            const response = await deleteService(token, id)
+            setServices((prevServices) => prevServices.filter((service) => service._id !== id));
+            showMessage(response.data.message, 'success');
+        } catch (error) {
+            console.log('Error deleting service', error);
+            showMessage(error.response.data.message, 'error');
         }
-    }, [token, user?.role])
+    }
+
+    const adminDeleteAppointment = async (id) => {
+        try {
+            const response = await deleteAppointment(token, id)
+            setAppointments((prevAppointments) => prevAppointments.filter((appointment) => appointment._id !== id));
+            showMessage(response.data.message, 'success');
+        } catch (error) {
+            console.log('Error deleting appointment', error);
+            showMessage(error.response.data.message, 'error');
+        }
+    }
+
 
     return (
-        <AdminContext.Provider value={{ users, adminGetUsers, adminDeleteUser }}>
+        <AdminContext.Provider value={{ users, adminDeleteUser, services, adminDeleteService, appointments, adminDeleteAppointment }}>
             {children}
         </AdminContext.Provider>
     )
