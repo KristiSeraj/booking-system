@@ -20,7 +20,7 @@ const CreateServiceModal = ({ onSave }) => {
 
     return (
         <>
-            <button onClick={() => setIsOpen(true)} className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300">
+            <button onClick={() => setIsOpen(true)} className="mb-5 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300">
                 Create Service
             </button>
 

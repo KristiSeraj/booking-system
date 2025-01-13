@@ -11,7 +11,7 @@ const GoBackButton = () => {
     return (
         <button
             onClick={handleGoBack}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-all"
+            className="flex items-center gap-2 mb-5 px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-all"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"

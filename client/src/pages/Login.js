@@ -16,7 +16,11 @@ const Login = () => {
         try {
             const response = await loginUser(email, password);
             login(response.data.user, response.data.token);
-            navigate('/dashboard');
+            if (response.data.user.role === 'admin') {
+                navigate('/admin');
+            } else {
+                navigate('/dashboard');
+            }
             showMessage(response.data.message, 'success')
         } catch (error) {
             console.error(error);
