@@ -33,7 +33,9 @@ export const ServiceProvider = ({ children }) => {
             setLoading(true);
             if (user?.role === ROLES.PROVIDER) {
                 response = await getServices(token);
-            } else {
+            } else if (user?.role === ROLES.CUSTOMER) {
+                response = await getAllProvidersAndServices(token);
+            } else if (user?.role === ROLES.ADMIN) {
                 response = await getAllProvidersAndServices(token);
             }
             setServices(response.data);

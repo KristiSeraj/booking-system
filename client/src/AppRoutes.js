@@ -9,15 +9,17 @@ import Layout from "./components/Layout";
 import ServiceDetails from "./components/ServiceDetails";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import AdminPanel from "./pages/AdminPanel";
 
 function AppRoutes() {
     const { user, loading } = useAuth();
-    const ProtectedRoute = ({ children, role }) => {
+
+    const ProtectedRoute = ({ children, roles }) => {
         if (loading) return <p>Loading...</p>
         if (!user) {
             return <Navigate to='/login' />
         }
-        if (role && user.role !== role) {
+        if (roles && !roles.includes(user.role)) {
             return <Navigate to='/' />
         }
         return children;
@@ -36,7 +38,7 @@ function AppRoutes() {
                     }
                     />
                     <Route path="/dashboard" element={
-                        <ProtectedRoute>
+                        <ProtectedRoute roles={['customer', 'provider']}>
                             <Dashboard />
                         </ProtectedRoute>
                     }
@@ -55,6 +57,12 @@ function AppRoutes() {
                     />
                 </Route>
                 <Route path="*" element={<NotFound />} />
+                <Route path='/admin' element={
+                    <ProtectedRoute roles={['admin']}>
+                        <AdminPanel />
+                    </ProtectedRoute>
+                } />
+                {user?.role === 'admin' && <Route path="*" element={<Navigate to='/admin' />} />}
             </Routes>
         </BrowserRouter>
     );
