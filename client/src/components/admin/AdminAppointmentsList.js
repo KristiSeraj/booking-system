@@ -25,9 +25,31 @@ const AdminAppointmentsList = () => {
                     <tbody>
                         {appointments.map((appointment) => (
                             <tr key={appointment._id} className="border-b">
-                                <td className="p-2">{appointment.service?.title || 'Service not available'}</td>
-                                <td className={`p-2 ${!appointment.customer?.name ? "text-red-500 font-semibold italic" : ''}`}>{appointment.customer?.name || 'Customer does not exist!'}</td>
-                                <td className={`p-2 ${!appointment.provider?.name ? "text-red-500 font-semibold italic" : ''}`}>{appointment.provider?.name || 'Provider does not exist!'}</td>
+                                <td className="p-2">
+                                    <div>
+                                        <strong className={`${!appointment.service ? 'text-yellow-500 italic' : ''}`}>{appointment.service?.title || 'Service not available!'}</strong>
+                                        <p className="text-sm text-gray-500">{appointment.service?.description}</p>
+                                    </div>
+                                </td>
+                                <td className="p-2">
+                                    <div>
+                                        <strong className={`${!appointment.customer ? 'text-red-500 italic' : ''}`}>{appointment.customer?.name || 'Customer does not exist!'}</strong>
+                                        <p className="text-sm text-gray-500">{appointment.customer?.email}</p>
+                                    </div>
+                                </td>
+                                <td className="p-2">
+                                    <div>
+                                        <strong className={`${!appointment.provider ? 'text-red-500 italic' : ''}`}>{appointment.provider?.name || 'Provider does not exist!'}</strong>
+                                        <p className="text-sm text-gray-500">{appointment.provider?.email}</p>
+                                    </div>
+                                </td>
+                                <td className="p-2">
+                                    <strong
+                                        className={`${appointment.status === 'Booked' ? 'text-blue-500 ' : appointment.status === 'Completed' ? 'text-green-500' : 'text-red-500'}`}
+                                    >
+                                        {appointment.status}
+                                    </strong>
+                                </td>
                                 <td className="p-2 text-center">
                                     <button onClick={() => handleDelete(appointment._id)} className="bg-red-500 text-white py-1 px-3 rounded-lg hover:bg-red-600">
                                         Delete
