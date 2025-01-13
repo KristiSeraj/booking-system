@@ -1,6 +1,8 @@
 const User = require("../models/User");
 const Appointment = require("../models/Appointment");
+const Service = require("../models/Service");
 
+// Get all users
 const getAllUsers = async (req, res) => {
     try {
         const users = await User.find({});
@@ -10,16 +12,32 @@ const getAllUsers = async (req, res) => {
     }
 }
 
+// Get all appointments
 const getAllAppointments = async (req, res) => {
     try {
-        const appointments = await Appointment.find({});
+        const appointments = await Appointment.find({})
+            .populate('service', 'title description')
+            .populate('customer', 'name email')
+            .populate('provider', 'name email')
+            .sort({ dateTime: 1 });
         return res.status(200).json(appointments);
     } catch (error) {
         return res.status(400).json({ message: error.message });
     }
 }
 
-const deleteUser = async (req, res) => {
+// Get all services
+const getAllServices = async (req, res) => {
+    try {
+        const services = await Service.find({}).populate('provider', 'name');
+        return res.status(200).json(services);
+    } catch (error) {
+        return res.status(400).json({ message: error.message })
+    }
+}
+
+// Delete user by id
+const deleteUserById = async (req, res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id);
         if (!user) {
@@ -37,7 +55,8 @@ const deleteUser = async (req, res) => {
     }
 }
 
-const deleteAppointment = async (req, res) => {
+// Delete appointment by id
+const deleteAppointmentById = async (req, res) => {
     try {
         const appointment = await Appointment.findByIdAndDelete(req.params.id);
         if (!appointment) {
@@ -49,4 +68,17 @@ const deleteAppointment = async (req, res) => {
     }
 }
 
-module.exports = { getAllUsers, getAllAppointments, deleteUser, deleteAppointment };
+// Delete service by id
+const deleteServiceById = async (req, res) => {
+    try {
+        const service = await Service.findByIdAndDelete(req.params.id);
+        if (!service) {
+            return res.status(404).json({ message: 'Service not found.' });
+        }
+        return res.status(200).json({ message: `Service with ID ${req.params.id} is deleted successfully` });
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}
+
+module.exports = { getAllUsers, getAllAppointments, getAllServices, deleteUserById, deleteAppointmentById, deleteServiceById };

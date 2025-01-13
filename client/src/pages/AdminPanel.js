@@ -20,7 +20,7 @@ const AdminPanel = () => {
 					<AdminCard title="Total Appointments" count="540" />
                 </div>
 
-				<div className="mt-12 bg-white rounded-lg shadow-md p-6">
+				<div className="mt-12 bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
 					<h2 className="text-xl font-semibold">Recent Appointments</h2>
 					<p className="text-gray-600 mt-2">Coming soon...</p>
 				</div>
