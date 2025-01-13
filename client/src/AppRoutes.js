@@ -61,7 +61,9 @@ function AppRoutes() {
                     <ProtectedRoute roles={['admin']}>
                         <AdminPanel />
                     </ProtectedRoute>
-                } />
+                }>
+                    
+                </Route>
                 {user?.role === 'admin' && <Route path="*" element={<Navigate to='/admin' />} />}
             </Routes>
         </BrowserRouter>

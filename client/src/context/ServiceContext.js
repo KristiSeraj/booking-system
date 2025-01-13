@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useAuth } from "./AuthContext";
 import { getAllProvidersAndServices, getServices, deleteServiceById, editService, createService, createSlot, getServiceById, deleteSlot, editSlot } from "../utils/serviceApi";
 import { useBanner } from "./BannerContext";
+import { getAllServices } from '../utils/adminApi';
 
 const ServiceContext = createContext();
 
@@ -36,7 +37,7 @@ export const ServiceProvider = ({ children }) => {
             } else if (user?.role === ROLES.CUSTOMER) {
                 response = await getAllProvidersAndServices(token);
             } else if (user?.role === ROLES.ADMIN) {
-                response = await getAllProvidersAndServices(token);
+                response = await getAllServices(token);
             }
             setServices(response.data);
         } catch (error) {

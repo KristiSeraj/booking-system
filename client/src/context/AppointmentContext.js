@@ -7,16 +7,16 @@ import { useServices } from "./ServiceContext";
 const AppointmentContext = createContext();
 
 export const AppointmentProvider = ({children}) => {
-    const { token } = useAuth();
+    const { token, user } = useAuth();
     const { showMessage } = useBanner();
     const { setServices } = useServices();
     const [appointments, setAppointments] = useState([]);
 
     useEffect(() => {
-        if (token) {
+        if (token && user?.role !== 'admin') {
             getAppointments()
         }
-    }, [token])
+    }, [token, user?.role])
 
     const getAppointments = async () => {
         if (!token) {
