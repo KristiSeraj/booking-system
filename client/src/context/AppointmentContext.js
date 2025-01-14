@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
-import { bookAppointment, getAllAppointments } from "../utils/appointmentApi";
+import { bookAppointment, changeAppointmentStatus, getAllAppointments } from "../utils/appointmentApi";
 import { useBanner } from "./BannerContext";
 import { useServices } from "./ServiceContext";
 
@@ -54,8 +54,20 @@ export const AppointmentProvider = ({children}) => {
             showMessage(error.response.data.message, 'error');
         }
     }
+
+    const updateAppointment = async (appointmentId, status) => {
+        try {
+            const response = await changeAppointmentStatus(token, appointmentId, status);
+            console.log(response);
+            showMessage(response.data.message, 'success');
+        } catch (error) {
+            console.log('Error updating status of appointment', error);
+            showMessage(error.response.data.message, 'error');
+        }
+    }
+
     return (
-        <AppointmentContext.Provider value={{ appointments, bookNewAppointment, getAppointments }}>
+        <AppointmentContext.Provider value={{ appointments, bookNewAppointment, getAppointments, updateAppointment }}>
             {children}
         </AppointmentContext.Provider>
     )

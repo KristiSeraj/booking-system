@@ -75,6 +75,7 @@ const deleteServiceById = async (req, res) => {
         if (!service) {
             return res.status(404).json({ message: 'Service not found.' });
         }
+        await Appointment.updateMany({ service: req.params.id }, { $set: { 'status': 'Canceled' }});
         return res.status(200).json({ message: `Service with ID ${req.params.id} is deleted successfully` });
     } catch (error) {
         return res.status(400).json({ message: error.message });
