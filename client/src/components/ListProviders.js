@@ -21,7 +21,7 @@ const ListProviders = () => {
                             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                                 {provider.services.map((service) => (
                                     <div key={service._id} className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                                        <Link to={`/service/${service._id}`} className="text-xl font-medium text-gray-700">{service.title}</Link>
+                                        <Link to={`/services/${service._id}`} className="text-xl font-medium text-gray-700">{service.title}</Link>
                                         <p className="text-gray-600">{service.description}</p>
                                     </div>
                                 ))}

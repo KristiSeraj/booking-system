@@ -62,8 +62,8 @@ const getAllAppointments = async (req, res) => {
 // Get an appointment details -> customer, provider
 const getAppointment = async (req, res) => {
     try {
-        const { appointmentId } = req.params;
-        const appointment = await Appointment.findById(appointmentId)
+        const { id } = req.params;
+        const appointment = await Appointment.findById(id)
             .populate('service', 'title description')
             .populate('customer', 'name email')
             .populate('provider', 'name email')
@@ -82,23 +82,50 @@ const changeAppointmentStatus = async (req, res) => {
     try {
         const { appointmentId } = req.params;
         const { role, id } = req.user;
+        const { status } = req.body;
+
         const appointment = await Appointment.findById(appointmentId);
+
         if (!appointment) {
             return res.status(404).json({ message: 'Appointment not found!' });
         }
+
         if (role === 'customer' && appointment.customer.toString() !== id) {
             return res.status(403).json({ message: 'You are not authorized to cancel this appointment!' });
         }
+
         if (role === 'provider' && appointment.provider.toString() !== id) {
             return res.status(403).json({ message: 'You are not authorized to cancel this appointment!' });
         }
-        appointment.status = 'Canceled';
+
+        const validateStatus = ['Booked', 'Completed', 'Canceled'];
+        if (!validateStatus.includes(status)) {
+            return res.status(400).json({ message: 'Invalid status' });
+        }
+
+        if (role === 'customer') {
+            if (status !== 'Canceled') {
+                return res.status(400).json({ message: 'Customers can only cancel their appointment.' });
+            }
+        }
+
+        if (role === 'provider') {
+            if (status === 'Booked') {
+                return res.status(400).json({ message: 'Cannot revert an appointment back to booked.' });
+            }
+        }
+
+        appointment.status = status;
         await appointment.save();
-        await Service.findOneAndUpdate(
-            { _id: appointment.service, 'availableSlots.dateTime': appointment.dateTime },
-            { $set: { 'availableSlots.$.isBooked': false } },
-        );
-        return res.status(200).json({ message: 'Appointment canceled successfully', appointment });
+
+        if (status === 'Canceled' || status === 'Completed') {
+            await Service.findOneAndUpdate(
+                { _id: appointment.service, 'availableSlots.dateTime': appointment.dateTime },
+                { $set: { 'availableSlots.$.isBooked': false } },
+            );
+        }
+        
+        return res.status(200).json({ message: `Appointment status updated to ${status}`, appointment });
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getServiceById } from "../utils/serviceApi";
-import SlotModal from "./SlotModal";
+import SlotModal from "../components/SlotModal";
 import { useServices } from "../context/ServiceContext";
-import ThreeDotMenu from "./ThreeDotMenu";
+import ThreeDotMenu from "../components/ThreeDotMenu";
 import { useAppointment } from "../context/AppointmentContext";
-import GoBackButton from "./GoBackButton";
+import GoBackButton from "../components/GoBackButton";
 
 const ServiceDetails = () => {
     const { id } = useParams();

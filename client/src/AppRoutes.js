@@ -6,13 +6,14 @@ import Dashboard from "./pages/Dashboard";
 import { useAuth } from "./context/AuthContext";
 import Appointments from "./pages/Appointments";
 import Layout from "./components/Layout";
-import ServiceDetails from "./components/ServiceDetails";
+import ServiceDetails from "./pages/ServiceDetails";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import AdminPanel from "./pages/AdminPanel";
 import AdminUsersList from "./components/admin/AdminUsersList";
 import AdminServicesList from "./components/admin/AdminServicesList";
 import AdminAppointmentsList from "./components/admin/AdminAppointmentsList";
+import AppointmentDetails from "./pages/AppointmentDetails";
 
 function AppRoutes() {
     const { user, loading } = useAuth();
@@ -35,29 +36,30 @@ function AppRoutes() {
                 <Route path="/register" element={<Register />} />
                 <Route element={<Layout />}>
                     <Route path="profile" element={
-                        <ProtectedRoute>
+                        <ProtectedRoute roles={['customer', 'provider']}>
                             <Profile />
                         </ProtectedRoute>
-                    }
-                    />
+                    } />
                     <Route path="/dashboard" element={
                         <ProtectedRoute roles={['customer', 'provider']}>
                             <Dashboard />
                         </ProtectedRoute>
-                    }
-                    />
+                    } />
                     <Route path="/appointments" element={
-                        <ProtectedRoute>
+                        <ProtectedRoute roles={['customer', 'provider']}>
                             <Appointments />
                         </ProtectedRoute>
-                    }
-                    />
-                    <Route path="/service/:id" element={
-                        <ProtectedRoute>
+                    } />
+                    <Route path="/services/:id" element={
+                        <ProtectedRoute roles={['customer', 'provider']}>
                             <ServiceDetails />
                         </ProtectedRoute>
-                    }
-                    />
+                    } />
+                    <Route path="/appointments/:id" element={
+                        <ProtectedRoute roles={['customer', 'provider']}>
+                            <AppointmentDetails />
+                        </ProtectedRoute>
+                    } />
                 </Route>
                 <Route path="*" element={<NotFound />} />
                 <Route path='/admin' element={

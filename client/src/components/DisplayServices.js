@@ -26,7 +26,7 @@ const DisplayServices = () => {
                 ) : listServices && listServices.map((service) => (
                     <div key={service._id}
                          className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow">
-                        <Link to={`/service/${service._id}`}
+                        <Link to={`/services/${service._id}`}
                               className="text-2xl font-semibold text-gray-800 mb-2 block">{service.title}</Link>
                         <p className="text-gray-600 mb-4">{service.description}</p>
                         <div className="flex gap-4">

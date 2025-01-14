@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useAppointment } from '../context/AppointmentContext';
+import { useNavigate } from 'react-router-dom';
 
 const Appointments = () => {
+    const navigate = useNavigate();
     const { appointments } = useAppointment();
     const [statusFilter, setStatusFilter] = useState('');
     const [filteredAppointments, setFilteredAppointments] = useState(appointments);
@@ -54,7 +56,7 @@ const Appointments = () => {
                         </tr>
                     ) : (
                         filteredAppointments.map(appointment => (
-                            <tr key={appointment._id}>
+                            <tr key={appointment._id} onClick={() => navigate(`/appointments/${appointment._id}`)} className='cursor-pointer hover:bg-gray-100'>
                                 <td className="px-4 py-2 border-b">
                                     <div>
                                         <strong className={`${!appointment.service ? 'text-yellow-500 italic' : ''}`}>{appointment.service?.title || 'Service not available!'}</strong>
