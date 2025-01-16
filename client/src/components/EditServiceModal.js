@@ -1,21 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const EditServiceModal = ({ service, onSave }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
 
+    useEffect(() => {
+        if (service) {
+            setTitle(service.title || '');
+            setDescription(service.description || '')
+        }
+    }, [service])
+
     const handleSave = () => {
         onSave({ ...service, title, description})
         handleClose();
     }
 
-    const handleClose = () => setIsOpen(false);
-
-    const handleOverlayClick = (e) => {
-        if (e.target === e.currentTarget) {
-            handleClose();
-        }
+    const handleClose = () => {
+        setIsOpen(false);
     }
 
     return (
@@ -25,7 +28,7 @@ const EditServiceModal = ({ service, onSave }) => {
             </button>
 
             {isOpen && (
-                <div onClick={handleOverlayClick} className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+                <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
                         <h2 className="text-2xl font-bold text-gray-800 mb-4">Edit Service</h2>
 

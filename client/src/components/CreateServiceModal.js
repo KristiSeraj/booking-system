@@ -10,12 +10,10 @@ const CreateServiceModal = ({ onSave }) => {
         handleClose();
     }
 
-    const handleClose = () => setIsOpen(false);
-
-    const handleOverlayClick = (e) => {
-        if (e.target === e.currentTarget) {
-            handleClose();
-        }
+    const handleClose = () => {
+        setIsOpen(false);
+        setTitle('');
+        setDescription('');
     }
 
     return (
@@ -25,7 +23,7 @@ const CreateServiceModal = ({ onSave }) => {
             </button>
 
             {isOpen && (
-                <div onClick={handleOverlayClick} className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+                <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
                         <h2 className="text-2xl font-bold text-gray-800 mb-4">Create Service</h2>
 
