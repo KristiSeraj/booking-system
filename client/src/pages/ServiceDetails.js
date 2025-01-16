@@ -71,69 +71,126 @@ const ServiceDetails = () => {
     const availableSlots = user?.role === 'customer' ? service?.availableSlots.filter((slot) => !slot.isBooked) : service?.availableSlots;
 
     if (loading) {
-        return <p className="text-center text-gray-500">Loading...</p>;
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+        );
     }
 
     if (error) {
-        return <p className="text-center text-red-500">{error}</p>;
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg">
+                    <p>{error}</p>
+                </div>
+            </div>
+        );
     }
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <GoBackButton />
-            {service ? (
-                <div className="bg-white shadow-md rounded-lg p-6">
-                    <h1 className="text-4xl font-bold text-gray-800 mb-4">{service.title}</h1>
-                    <p className="text-gray-600">{service.description}</p>
-                    {user?.role === 'provider' && (
-                        <div className="mt-6 text-gray-500">
-                            <p><strong>Created At:</strong> {new Date(service.createdAt).toLocaleDateString()}</p>
-                            <p><strong>Updated At:</strong> {new Date(service.updatedAt).toLocaleDateString()}</p>
-                        </div>
-                    )}
+        <div className="min-h-screen bg-gray-50">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <GoBackButton />
+                {service ? (
+                    <div className="bg-white shadow-lg rounded-xl p-6 sm:p-8">
+                        <div className="max-w-3xl mx-auto">
+                            <h1 className="text-4xl font-bold text-gray-900 mb-4">{service.title}</h1>
+                            <p className="text-lg text-gray-600 mb-6">{service.description}</p>
+                            {user?.role === 'provider' && (
+                                <div className="flex gap-6 text-sm text-gray-500 border-t border-gray-100 pt-4">
+                                    <p><span className="font-medium">Created:</span> {new Date(service.createdAt).toLocaleDateString()}</p>
+                                    <p><span className="font-medium">Updated:</span> {new Date(service.updatedAt).toLocaleDateString()}</p>
+                                </div>
+                            )}
 
-                    <div className="mt-8">
-                        <div className="mt-8 flex items-center justify-between mb-6">
-                            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Available Slots</h2>
-                            <button onClick={handleCreate} className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300">
-                                Create Slot
-                            </button>
-                            {user?.role === 'provider' && <SlotModal onSave={handleCreateOrUpdate} initialData={editingSlot} isOpen={openModal} onClose={() => setOpenModal(false)} />}
-                        </div>
-                        {availableSlots && availableSlots.length > 0 ? (
-                            <ul className="space-y-4">
-                                {availableSlots.map((slot) => (
-                                    <li key={slot._id}
-                                        className="flex items-center justify-between bg-gray-50 p-4 rounded-lg border border-gray-200">
-                                        <span className="text-gray-700 uppercase">{new Date(slot.dateTime).toLocaleString('en-GB', { month: '2-digit', day: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true })}</span>
-                                        <span className={`px-3 py-1 rounded-full text-sm ${slot.isBooked ? "bg-red-500 text-white" : 'bg-green-500 text-white'}`}>{slot.isBooked ? "Booked" : "Available"}</span>
-                                        {user?.role === 'provider' ? (
-                                            <ThreeDotMenu 
-                                                slotId={slot._id} 
-                                                isOpen={openSlotMenu === slot._id} 
-                                                toggleMenu={handleSlotMenu} 
-                                                onEdit={() => handleEdit(slot)} 
-                                                onDelete={handleDelete} 
-                                            />
-                                        ) : (
+                            <div className="mt-12">
+                                <div className="flex items-center justify-between mb-8">
+                                    <h2 className="text-2xl font-bold text-gray-900">Available Slots</h2>
+                                    {user?.role === 'provider' && (
+                                        <>
                                             <button 
-                                                className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition-colors focus:outline-none focus:ring-2 focus:ring-green-300" 
-                                                onClick={() => handleBookAppoinment(service._id, slot._id)}
+                                                onClick={handleCreate} 
+                                                className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                             >
-                                                Book
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+                                                </svg>
+                                                Create Slot
                                             </button>
-                                        )}
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p>No available Slots</p>
-                        )}
+                                            <SlotModal onSave={handleCreateOrUpdate} initialData={editingSlot} isOpen={openModal} onClose={() => setOpenModal(false)} />
+                                        </>
+                                    )}
+                                </div>
+                                {availableSlots && availableSlots.length > 0 ? (
+                                    <div className="grid gap-4">
+                                        {availableSlots.map((slot) => (
+                                            <div 
+                                                key={slot._id}
+                                                className="flex items-center justify-between bg-white p-6 rounded-xl border border-gray-200 hover:border-blue-300 transition-colors shadow-sm hover:shadow-md"
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <div className="bg-blue-50 rounded-lg p-3">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        </svg>
+                                                    </div>
+                                                    <span className="text-lg font-medium text-gray-900">
+                                                        {new Date(slot.dateTime).toLocaleString('en-GB', { 
+                                                            month: 'long', 
+                                                            day: 'numeric', 
+                                                            year: 'numeric', 
+                                                            hour: '2-digit', 
+                                                            minute: '2-digit', 
+                                                            hour12: true 
+                                                        })}
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center gap-4">
+                                                    <span className={`px-4 py-2 rounded-full text-sm font-medium ${
+                                                        slot.isBooked 
+                                                            ? "bg-red-100 text-red-800" 
+                                                            : 'bg-green-100 text-green-800'
+                                                    }`}>
+                                                        {slot.isBooked ? "Booked" : "Available"}
+                                                    </span>
+                                                    {user?.role === 'provider' ? (
+                                                        <ThreeDotMenu 
+                                                            slotId={slot._id} 
+                                                            isOpen={openSlotMenu === slot._id} 
+                                                            toggleMenu={handleSlotMenu} 
+                                                            onEdit={() => handleEdit(slot)} 
+                                                            onDelete={handleDelete} 
+                                                        />
+                                                    ) : (
+                                                        <button 
+                                                            className="inline-flex items-center px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2" 
+                                                            onClick={() => handleBookAppoinment(service._id, slot._id)}
+                                                        >
+                                                            Book Now
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        <p className="mt-4 text-lg text-gray-600">No available slots</p>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
-                    ) : (
-                    <p className="text-gray-600">Service not found.</p>
-            )}
+                ) : (
+                    <div className="text-center py-12 bg-white rounded-xl shadow-lg">
+                        <p className="text-xl text-gray-600">Service not found.</p>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }

@@ -20,7 +20,7 @@ const getAllProvidersAndServices = async (req, res) => {
         const providers = await User.find({ role: 'provider' })
             .populate({
                 path: 'services',
-                select: 'title'
+                select: 'title description'
             })
             .select('name');
         if (!providers.length) {
