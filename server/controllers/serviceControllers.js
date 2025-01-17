@@ -99,11 +99,12 @@ const createSlot = async (req, res) => {
         if (!service) {
             return res.status(404).json({ message: 'Service not found!' });
         }
-        const existingSlot = service.availableSlots.find((slot) => slot.dateTime.toISOString() === new Date(dateTime).toISOString());
+        const normalizedDateTime = new Date(`${dateTime}Z`).toISOString();
+        const existingSlot = service.availableSlots.find((slot) => new Date(slot.dateTime).toISOString() === normalizedDateTime);
         if (existingSlot) {
             return res.status(404).json({ message: 'Slot already exists at this time!' });
         }
-        service.availableSlots.push({ dateTime });
+        service.availableSlots.push({ dateTime: normalizedDateTime });
         await service.save();
         return res.status(201).json({ message: 'Slot created!', service });
     } catch (error) {
