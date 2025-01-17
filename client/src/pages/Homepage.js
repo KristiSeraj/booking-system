@@ -23,8 +23,9 @@ const Homepage = () => {
                     Discover amazing features and services that await you. Book appointments with ease and manage your schedule efficiently.
                 </p>
                 <div className="space-x-4">
+                    {!user && (
                     <Link 
-                        to={user?.role === 'admin' ? '/admin' : user ? '/dashboard' : '/login'}
+                        to='/register'
                         className="inline-flex items-center px-8 py-3 text-lg font-semibold text-white bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out"
                     >
                         Get Started
@@ -32,14 +33,13 @@ const Homepage = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                         </svg>
                     </Link>
-                    {!user && (
+                    )}
                         <Link 
-                            to="/register" 
+                            to={user?.role === 'admin' ? '/admin' : user ? '/dashboard' : '/login'}
                             className="inline-flex items-center px-8 py-3 text-lg font-semibold text-white bg-black/30 hover:bg-black/40 rounded-full backdrop-blur-sm shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out"
                         >
-                            Sign Up
+                            Sign In
                         </Link>
-                    )}
                 </div>
             </div>
         </div>
