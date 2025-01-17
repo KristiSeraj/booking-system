@@ -32,10 +32,18 @@ const DisplayServices = () => {
                 </div>
 
                 {listServices.length === 0 ? (
-                    <div className="text-center py-12">
-                        <div className="bg-white rounded-xl shadow-lg p-8 sm:p-10 max-w-md mx-auto border border-gray-100">
-                            <p className="text-gray-600 text-lg sm:text-xl">
-                                No services available. Create your first service to get started.
+                    <div className="text-center py-16">
+                        <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-10 sm:p-12 max-w-lg mx-auto border border-gray-200">
+                            <div className="mb-6">
+                                <svg className="w-16 h-16 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                            </div>
+                            <p className="text-gray-700 text-xl font-medium">
+                                No services available yet
+                            </p>
+                            <p className="text-gray-500 mt-2">
+                                Create your first service to get started
                             </p>
                         </div>
                     </div>
@@ -44,7 +52,7 @@ const DisplayServices = () => {
                         {listServices.map((service) => (
                             <div 
                                 key={service._id}
-                                className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-t-4 hover:border-t-blue-500 transform hover:-translate-y-1 hover:scale-102"
+                                className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-t-4 hover:border-t-blue-500 hover:scale-102"
                             >
                                 <div className="p-6 sm:p-8 flex flex-col h-full">
                                     <div className="flex-grow">
