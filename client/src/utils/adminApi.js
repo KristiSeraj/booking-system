@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:8080/api';
+const baseUrl = process.env.REACT_APP_API_URL;
 
 export const getAllUsers = async (token) => await axios.get(`${baseUrl}/admin/users`, { headers: { 'x-auth-token': token }});
 export const getAllAppointments = async (token) => await axios.get(`${baseUrl}/admin/appointments`, { headers: { 'x-auth-token': token }});
