@@ -7,7 +7,10 @@ const cors = require('cors');
 connectDB();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: process.env.BASE_URI,
+    credentials: true
+}));
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', allRoutes);
