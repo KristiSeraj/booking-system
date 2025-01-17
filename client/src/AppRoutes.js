@@ -19,7 +19,16 @@ function AppRoutes() {
     const { user, loading } = useAuth();
 
     const ProtectedRoute = ({ children, roles }) => {
-        if (loading) return <p>Loading...</p>
+        if (loading) {
+            return (
+                <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                    <div className="animate-pulse flex flex-col items-center">
+                        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                        <p className="mt-4 text-lg text-gray-600">Loading...</p>
+                    </div>
+                </div>
+            );
+        }
         if (!user) {
             return <Navigate to='/login' />
         }
