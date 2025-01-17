@@ -44,26 +44,28 @@ const DisplayServices = () => {
                         {listServices.map((service) => (
                             <div 
                                 key={service._id}
-                                className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
+                                className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-t-4 hover:border-t-blue-500 transform hover:-translate-y-1 hover:scale-102"
                             >
-                                <div className="p-6 sm:p-8">
-                                    <Link 
-                                        to={`/services/${service._id}`}
-                                        className="text-xl sm:text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors duration-300 block mb-3"
-                                    >
-                                        {service.title}
-                                    </Link>
-                                    <p className="text-gray-600 text-base sm:text-lg mb-6 line-clamp-3">
-                                        {service.description}
-                                    </p>
-                                    <div className="flex gap-4 pt-4 border-t border-gray-100">
+                                <div className="p-6 sm:p-8 flex flex-col h-full">
+                                    <div className="flex-grow">
+                                        <Link 
+                                            to={`/services/${service._id}`}
+                                            className="text-xl sm:text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors duration-300 block mb-3"
+                                        >
+                                            {service.title}
+                                        </Link>
+                                        <p className="text-gray-600 text-base sm:text-lg mb-6 line-clamp-3 leading-relaxed">
+                                            {service.description}
+                                        </p>
+                                    </div>
+                                    <div className="flex gap-4 pt-4 border-t border-gray-100 mt-auto">
                                         <EditServiceModal 
                                             service={service} 
                                             onSave={handleSave}
                                         />
                                         <button 
                                             onClick={() => deleteService(service._id)}
-                                            className="flex-1 bg-white border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-50 transition-colors focus:outline-none focus:ring-2 focus:ring-red-200"
+                                            className="flex-1 bg-white border border-rose-500 text-rose-500 py-2 px-4 rounded-lg hover:bg-rose-500 hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-rose-200 active:bg-rose-600"
                                         >
                                             Delete
                                         </button>
