@@ -23,9 +23,6 @@ const AdminPanel = () => {
 						<AdminCard title="Total Services" count={services.length} />
 						<AdminCard title="Total Appointments" count={appointments.length} />
 					</div>
-
-					{/* <div className="mt-12 bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-					</div> */}
 					<Outlet />
 				</main>
 			</div>

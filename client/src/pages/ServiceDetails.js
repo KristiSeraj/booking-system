@@ -72,17 +72,25 @@ const ServiceDetails = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100">
+                <div className="flex flex-col items-center space-y-4">
+                    <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-500 border-t-transparent"></div>
+                    <p className="text-gray-600 font-medium">Loading service details...</p>
+                </div>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg">
-                    <p>{error}</p>
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100">
+                <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-lg max-w-lg mx-4">
+                    <div className="flex items-center space-x-3">
+                        <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p className="text-red-700 font-medium">{error}</p>
+                    </div>
                 </div>
             </div>
         );
@@ -142,7 +150,8 @@ const ServiceDetails = () => {
                                                             year: 'numeric', 
                                                             hour: '2-digit', 
                                                             minute: '2-digit', 
-                                                            hour12: true 
+                                                            hour12: true,
+                                                            timeZone: 'UTC'
                                                         })}
                                                     </span>
                                                 </div>
