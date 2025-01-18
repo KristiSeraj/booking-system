@@ -26,13 +26,8 @@ const register = async (req, res) => {
 // Login
 const login = async (req, res) => {
     const { email, password } = req.body;
-    const start = Date.now();
-    console.log("Request received at:", new Date(start));
-
     try {
-        const userStart = Date.now();
         const user = await User.findOne({ email });
-        console.log("Database query took:", Date.now() - userStart, "ms");
         if (!user) {
             return res.status(404).json({ message: 'User not found!' });
         }

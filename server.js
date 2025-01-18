@@ -11,6 +11,7 @@ app.use(cors({
     origin: process.env.BASE_URI,
     credentials: true
 }));
+app.options("*", cors());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', allRoutes);
