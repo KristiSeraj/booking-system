@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useBanner } from "../context/BannerContext";
 
 const SlotModal = ({ onSave, initialData, isOpen, onClose }) => {
+    const { showMessage } = useBanner();
     const [dateTime, setDateTime] = useState(initialData ? new Date(initialData.dateTime).toISOString().slice(0, 16) : '');
 
     useEffect(() => {
@@ -10,6 +12,14 @@ const SlotModal = ({ onSave, initialData, isOpen, onClose }) => {
     }, [initialData]);
 
     const handleSave = () => {
+        const selectedTime = new Date(dateTime);
+        const now = new Date();
+        now.setSeconds(0, 0);
+        if (!dateTime || selectedTime < now) {
+            // alert("Please select a valid date and time");
+            showMessage('Please select a valid date and time', 'info');
+            return;
+        }
         onSave(dateTime, initialData?._id);
         onClose();
     }
@@ -47,6 +57,7 @@ const SlotModal = ({ onSave, initialData, isOpen, onClose }) => {
                                 type="datetime-local"
                                 value={dateTime}
                                 onChange={(e) => setDateTime(e.target.value)}
+                                min={new Date().toISOString().slice(0, 16)}
                                 className="block w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
                             />
                         </div>

@@ -104,7 +104,7 @@ export const ServiceProvider = ({ children }) => {
             showMessage(response.data.message, 'success');
         } catch (error) {
             console.log('Error creating slot', error);
-            showMessage(error.response.data.error, 'error');
+            showMessage(error.response.data.message, 'error');
         }
     }
 
