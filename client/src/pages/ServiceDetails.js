@@ -68,7 +68,7 @@ const ServiceDetails = () => {
         fetchServiceById();
     }, [id, token])
 
-    const availableSlots = user?.role === 'customer' ? service?.availableSlots.filter((slot) => !slot.isBooked) : service?.availableSlots;
+    const availableSlots = user?.role === 'customer' ? service?.availableSlots.filter((slot) => !slot.isBooked).sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime)) : service?.availableSlots.sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));
 
     if (loading) {
         return (
