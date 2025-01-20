@@ -8,12 +8,13 @@ const register = async (req, res) => {
     const { name, email, password, role } = req.body;
 
     try {
-        let user = await User.findOne({ email });
+        const email_lowercase = email.toLowerCase();
+        let user = await User.findOne({ email: email_lowercase });
         if (user) {
             return res.status(409).json({ message: 'User already exists' });
         }
         const hashedPassword = await bcrypt.hash(password, 12);
-        user = await new User({ name, email, password: hashedPassword, role });
+        user = await new User({ name, email: email_lowercase, password: hashedPassword, role });
         await user.save();
         const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '3h' });
         return res.status(201).json({ message: 'User created successfully', token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
@@ -27,7 +28,8 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await User.findOne({ email });
+        const email_lowercase = email.toLowerCase();
+        const user = await User.findOne({ email: email_lowercase });
         if (!user) {
             return res.status(404).json({ message: 'User not found!' });
         }
