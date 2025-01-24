@@ -14,6 +14,7 @@ import AdminUsersList from "./components/admin/AdminUsersList";
 import AdminServicesList from "./components/admin/AdminServicesList";
 import AdminAppointmentsList from "./components/admin/AdminAppointmentsList";
 import AppointmentDetails from "./pages/AppointmentDetails";
+import {AdminProvider} from "./context/AdminContext";
 
 function AppRoutes() {
     const { user, loading } = useAuth();
@@ -37,12 +38,16 @@ function AppRoutes() {
         }
         return children;
     }
+
     return (
         <BrowserRouter>
             <Routes>
+                {/*Public Routes*/}
                 <Route index element={<Homepage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+
+                {/*Protected Routes*/}
                 <Route element={<Layout />}>
                     <Route path="profile" element={
                         <ProtectedRoute roles={['customer', 'provider']}>
@@ -70,17 +75,22 @@ function AppRoutes() {
                         </ProtectedRoute>
                     } />
                 </Route>
-                <Route path="*" element={<NotFound />} />
+
+                {/*Admin Routes*/}
                 <Route path='/admin' element={
-                    <ProtectedRoute roles={['admin']}>
-                        <AdminPanel />
-                    </ProtectedRoute>
+                    <AdminProvider>
+                        <ProtectedRoute roles={['admin']}>
+                            <AdminPanel />
+                        </ProtectedRoute>
+                    </AdminProvider>
                 }>
                     <Route path="users" element={<AdminUsersList />}/>
                     <Route path="services" element={<AdminServicesList />}/>
                     <Route path="appointments" element={<AdminAppointmentsList />} />
                 </Route>
                 {user?.role === 'admin' && <Route path="*" element={<Navigate to='/admin' />} />}
+
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </BrowserRouter>
     );

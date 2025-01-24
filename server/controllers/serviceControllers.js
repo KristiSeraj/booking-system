@@ -6,7 +6,7 @@ const User = require('../models/User');
 const createService = async (req, res) => {
     try {
         const { title, description } = req.body;
-        const service = await new Service({ title, description, provider: req.user.id });
+        const service = new Service({ title, description, provider: req.user.id });
         await service.save();
         return res.status(201).json(service);
     } catch (error) {

@@ -11,9 +11,7 @@ function App() {
             <AuthProvider>
                 <ServiceProvider>
                     <AppointmentProvider>
-                        <AdminProvider>
-                            <AppRoutes />
-                        </AdminProvider>
+                        <AppRoutes />
                     </AppointmentProvider>
                 </ServiceProvider>
             </AuthProvider>
